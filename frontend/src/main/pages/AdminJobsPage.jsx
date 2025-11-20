@@ -53,7 +53,6 @@ const AdminJobsPage = () => {
     RecordCommonStatsMutation.mutate();
   };
 
-
   // *** SetCowHealth job ***
 
   const objectToAxiosParamsSetCowHealthJob = (data) => ({

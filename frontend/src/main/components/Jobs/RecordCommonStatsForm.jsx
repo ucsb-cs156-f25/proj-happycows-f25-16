@@ -7,7 +7,7 @@ function RecordCommonStatsForm({ submitAction }) {
   return (
     <Form onSubmit={handleSubmit(submitAction)}>
       <p>Click this button to record stats for all commons!</p>
-      <Button type="submit" data-testid="RecordCommonStats-Submit-Button">
+      <Button type="submit" data-testid="RecordCommonStatsForm-Submit-Button">
         Generate
       </Button>
     </Form>

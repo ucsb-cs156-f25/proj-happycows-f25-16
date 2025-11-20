@@ -14,10 +14,12 @@ describe("RecordCommonStatsForm tests", () => {
     const submitAction = vi.fn();
     render(<RecordCommonStatsForm submitAction={submitAction} />);
     expect(
-      screen.getByText("Click this button to record stats for all commons!")
+      screen.getByText("Click this button to record stats for all commons!"),
     ).toBeInTheDocument();
 
-    const submitButton = screen.getByTestId("RecordCommonStats-Submit-Button");
+    const submitButton = screen.getByTestId(
+      "RecordCommonStatsForm-Submit-Button",
+    );
     expect(submitButton).toBeInTheDocument();
     expect(submitButton).toHaveTextContent("Generate");
   });
@@ -26,7 +28,9 @@ describe("RecordCommonStatsForm tests", () => {
     const submitAction = vi.fn();
     render(<RecordCommonStatsForm submitAction={submitAction} />);
 
-    const submitButton = screen.getByTestId("RecordCommonStats-Submit-Button");
+    const submitButton = screen.getByTestId(
+      "RecordCommonStatsForm-Submit-Button",
+    );
     fireEvent.click(submitButton);
 
     await waitFor(() => {
