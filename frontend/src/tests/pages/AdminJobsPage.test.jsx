@@ -405,4 +405,38 @@ describe("AdminJobsPage tests", () => {
       );
     });
   });
+  test("user can submit Record Common Stats job", async () => {
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AdminJobsPage />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    expect(await screen.findByText("Record Common Stats")).toBeInTheDocument();
+
+    const button = screen.getByText("Record Common Stats");
+    expect(button).toBeInTheDocument();
+    fireEvent.click(button);
+
+    const submitButton = await screen.findByTestId(
+      "RecordCommonStatsForm-Submit-Button",
+    );
+    expect(submitButton).toBeInTheDocument();
+
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(axiosMock.history.post.length).toBe(1);
+    });
+
+    expect(axiosMock.history.post[0].url).toBe(
+      "/api/jobs/launch/recordcommonstats",
+    );
+
+    expect(mockToast).toHaveBeenCalledWith(
+      "Submitted Job: Record Common Stats",
+    );
+  });
 });

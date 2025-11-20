@@ -245,4 +245,52 @@ describe("CommonsCard tests", () => {
     fireEvent.click(button);
     expect(click).toBeCalledTimes(1);
   });
+
+  test("cannot join commons with future start date - future month (alert)", async () => {
+    const common = { ...commonsFixtures.threeCommons[2] };
+
+    common.startingDate = new Date(
+      curr.getFullYear(),
+      curr.getMonth() + 1, // next month
+      curr.getDate(),
+    )
+      .toISOString()
+      .substring(0, 10);
+
+    const click = vi.fn();
+    window.alert = vi.fn();
+
+    render(
+      <CommonsCard commons={common} buttonText="Join" buttonLink={click} />,
+    );
+
+    const button = screen.getByTestId("commonsCard-button-Join-1");
+    fireEvent.click(button);
+
+    expect(click).toHaveBeenCalledTimes(0);
+    expect(window.alert).toHaveBeenCalledTimes(1);
+  });
+
+  test("can join commons when start month is current month but start day is in the past", async () => {
+    const common = { ...commonsFixtures.threeCommons[2] };
+
+    common.startingDate = new Date(
+      curr.getFullYear(),
+      curr.getMonth(),
+      curr.getDate() - 2, // earlier this month
+    )
+      .toISOString()
+      .substring(0, 10);
+
+    const click = vi.fn();
+
+    render(
+      <CommonsCard commons={common} buttonText="Join" buttonLink={click} />,
+    );
+
+    const button = screen.getByTestId("commonsCard-button-Join-1");
+    fireEvent.click(button);
+
+    expect(click).toHaveBeenCalledTimes(1);
+  });
 });
