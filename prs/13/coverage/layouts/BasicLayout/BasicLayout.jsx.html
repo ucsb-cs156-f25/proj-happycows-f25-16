@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>19/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>19/19</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -89,58 +89,58 @@
 <a name='L24'></a><a href='#L24'>24</a>
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">208x</span>
+<span class="cline-any cline-yes">208x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">208x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">208x</span>
+<span class="cline-any cline-yes">208x</span>
+<span class="cline-any cline-yes">208x</span>
+<span class="cline-any cline-yes">208x</span>
+<span class="cline-any cline-yes">208x</span>
+<span class="cline-any cline-yes">208x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">208x</span>
+<span class="cline-any cline-yes">208x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">208x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { Container } from "react-bootstrap";<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >import Footer from "main/components/Nav/Footer";</span>
-<span class="cstat-no" title="statement not covered" >import AppNavbar from "main/components/Nav/AppNavbar";</span>
-<span class="cstat-no" title="statement not covered" >import { useCurrentUser, useLogout } from "main/utils/currentUser";</span>
-<span class="cstat-no" title="statement not covered" >import { useSystemInfo } from "main/utils/systemInfo";</span>
+<span class="cline-any cline-yes">208x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Container } from "react-bootstrap";
+import Footer from "main/components/Nav/Footer";
+import AppNavbar from "main/components/Nav/AppNavbar";
+import { useCurrentUser, useLogout } from "main/utils/currentUser";
+import { useSystemInfo } from "main/utils/systemInfo";
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export default function BasicLayout({ children }) {</span>
-<span class="cstat-no" title="statement not covered" >  const { data: currentUser } = useCurrentUser();</span>
-<span class="cstat-no" title="statement not covered" >  const { data: systemInfo } = useSystemInfo();</span>
+export default function BasicLayout({ children }) {
+  const { data: currentUser } = useCurrentUser();
+  const { data: systemInfo } = useSystemInfo();
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  const doLogout = useLogout().mutate;</span>
+  const doLogout = useLogout().mutate;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-<span class="cstat-no" title="statement not covered" >    &lt;div className="d-flex flex-column min-vh-100"&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;AppNavbar</span>
-<span class="cstat-no" title="statement not covered" >        currentUser={currentUser}</span>
-<span class="cstat-no" title="statement not covered" >        systemInfo={systemInfo}</span>
-<span class="cstat-no" title="statement not covered" >        doLogout={doLogout}</span>
+  return (
+    &lt;div className="d-flex flex-column min-vh-100"&gt;
+      &lt;AppNavbar
+        currentUser={currentUser}
+        systemInfo={systemInfo}
+        doLogout={doLogout}
       /&gt;
-<span class="cstat-no" title="statement not covered" >      &lt;Container expand="xl" className="pt-4 flex-grow-1"&gt;</span>
-<span class="cstat-no" title="statement not covered" >        {children}</span>
+      &lt;Container expand="xl" className="pt-4 flex-grow-1"&gt;
+        {children}
       &lt;/Container&gt;
-<span class="cstat-no" title="statement not covered" >      &lt;Footer /&gt;</span>
+      &lt;Footer /&gt;
     &lt;/div&gt;
   );
-<span class="cstat-no" title="statement not covered" >}</span>
+}
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -148,7 +148,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-21T01:13:34.096Z
+                at 2025-11-21T02:03:33.950Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
