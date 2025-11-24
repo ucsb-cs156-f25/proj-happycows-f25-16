@@ -10,6 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.http.MediaType;
+import org.mockito.ArgumentCaptor;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -217,9 +218,9 @@ public class CourseControllerTests extends ControllerTestCase {
 
         Course originalCourse = Course.builder()
                 .id(7L)
-                .code("CMPSC 156")
-                .name("Advanced App Programming")
-                .term("F24")
+                .code("OLD 1")
+                .name("Old Course")
+                .term("F20")
                 .build();
 
         Course updatedCourse = Course.builder()
@@ -236,7 +237,7 @@ public class CourseControllerTests extends ControllerTestCase {
                 .build();
 
         when(courseRepository.findById(7L)).thenReturn(Optional.of(originalCourse));
-        when(courseRepository.save(originalCourse)).thenReturn(savedCourse);
+        when(courseRepository.save(any(Course.class))).thenReturn(savedCourse);
 
         MvcResult response = mockMvc.perform(put("/api/course/7")
                 .with(csrf())
@@ -245,7 +246,13 @@ public class CourseControllerTests extends ControllerTestCase {
                 .andExpect(status().isOk()).andReturn();
 
         verify(courseRepository, times(1)).findById(7L);
-        verify(courseRepository, times(1)).save(originalCourse);
+        ArgumentCaptor<Course> courseCaptor = ArgumentCaptor.forClass(Course.class);
+        verify(courseRepository, times(1)).save(courseCaptor.capture());
+        Course savedArgument = courseCaptor.getValue();
+        assertEquals(7L, savedArgument.getId());
+        assertEquals(updatedCourse.getCode(), savedArgument.getCode());
+        assertEquals(updatedCourse.getName(), savedArgument.getName());
+        assertEquals(updatedCourse.getTerm(), savedArgument.getTerm());
         String expectedJson = mapper.writeValueAsString(savedCourse);
         String responseString = response.getResponse().getContentAsString();
         assertEquals(expectedJson, responseString);
