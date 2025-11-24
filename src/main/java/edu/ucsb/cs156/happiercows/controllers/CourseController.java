@@ -67,4 +67,18 @@ public class CourseController extends ApiController {
         Course savedCourse = courseRepository.save(course);
         return savedCourse;
     }
+
+    @Operation(summary = "Delete a course")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    public Object deleteCourse(
+            @Parameter(name = "id") @PathVariable Long id) {
+        courseRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Course.class, id));
+
+        courseRepository.deleteById(id);
+
+        String responseString = String.format("course with id %d deleted", id);
+        return genericMessage(responseString);
+    }
 }
