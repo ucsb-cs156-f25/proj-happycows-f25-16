@@ -67,10 +67,26 @@ describe("LoginPage tests", () => {
       </QueryClientProvider>,
     );
 
-    await screen.findByText("Log In");
-    expect(screen.getByText("Log In")).toHaveAttribute(
+    const link = await screen.findByTestId("login-oauth-link");
+    expect(link).toHaveAttribute("href", "/oauth2/authorization/google");
+  });
+
+  test("LoginCard uses custom oauthLogin when defined", async () => {
+    axiosMock.onGet("/api/systemInfo").reply(200, {
+      oauthLogin: "/custom/login/url",
+    });
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <LoginCard />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    expect(await screen.findByText("Log In")).toHaveAttribute(
       "href",
-      "/oauth2/authorization/google",
+      "/custom/login/url",
     );
   });
 });

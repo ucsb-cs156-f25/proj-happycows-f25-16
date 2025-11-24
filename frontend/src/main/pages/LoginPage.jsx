@@ -20,7 +20,11 @@ const LoginCard = () => {
           Welcome to Happy Cows!
         </Card.Title>
         <Card.Text>In order to start playing, please login.</Card.Text>
-        <Button href={oauthLogin} variant="primary">
+        <Button
+          data-testid="login-oauth-link"
+          href={oauthLogin}
+          variant="primary"
+        >
           Log In
         </Button>
       </Card.Body>

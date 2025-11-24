@@ -37,11 +37,6 @@ describe("utils/systemInfo tests", () => {
       });
       await waitFor(() => result.current.isSuccess);
 
-      //expect(result.current.data).toEqual({
-      //  initialData: true,
-      //  springH2ConsoleEnabled: false,
-      //  showSwaggerUILink: false,
-      //});
       expect(result.current.data.springH2ConsoleEnabled).toBe(false);
       expect(result.current.data.showSwaggerUILink).toBe(false);
 
@@ -68,7 +63,6 @@ describe("utils/systemInfo tests", () => {
 
       await waitFor(() => result.current.isFetched);
 
-      //expect(result.current.data).toEqual(systemInfoFixtures.showingAll);
       expect(result.current.data.springH2ConsoleEnabled).toBe(
         systemInfoFixtures.showingAll.springH2ConsoleEnabled,
       );
@@ -118,5 +112,28 @@ describe("utils/systemInfo tests", () => {
       );
       queryClient.clear();
     });
+  });
+
+  test("useSystemInfo returns default false values when API unreachable", async () => {
+    const queryClient = new QueryClient();
+    const wrapper = ({ children }) => (
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    );
+
+    var axiosMock = new AxiosMockAdapter(axios);
+    axiosMock.onGet("/api/systemInfo").reply(404);
+
+    const { result } = renderHook(() => useSystemInfo(), { wrapper });
+
+    await waitFor(() => result.current.isFetched);
+
+    expect(result.current.data.springH2ConsoleEnabled).toBe(false);
+    expect(result.current.data.springH2ConsoleEnabled).not.toBe(true);
+
+    expect(result.current.data.showSwaggerUILink).toBe(false);
+    expect(result.current.data.showSwaggerUILink).not.toBe(true);
+
+    queryClient.clear();
+    axiosMock.restore();
   });
 });
