@@ -10,6 +10,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.http.MediaType;
+import org.mockito.ArgumentCaptor;
+import org.springframework.test.util.ReflectionTestUtils;
 import java.util.Map;
 
 import java.util.ArrayList;
@@ -279,15 +281,8 @@ public class CourseControllerTests extends ControllerTestCase {
                 .term("W25")
                 .build();
 
-        Course savedCourse = Course.builder()
-                .id(7L)
-                .code("CMPSC 156")
-                .name("Advanced App Programming")
-                .term("W25")
-                .build();
-
         when(courseRepository.findById(7L)).thenReturn(Optional.of(originalCourse));
-        when(courseRepository.save(originalCourse)).thenReturn(savedCourse);
+        when(courseRepository.save(any(Course.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         MvcResult response = mockMvc.perform(put("/api/course/7")
                 .with(csrf())
@@ -296,10 +291,19 @@ public class CourseControllerTests extends ControllerTestCase {
                 .andExpect(status().isOk()).andReturn();
 
         verify(courseRepository, times(1)).findById(7L);
-        verify(courseRepository, times(1)).save(originalCourse);
-        String expectedJson = mapper.writeValueAsString(savedCourse);
+        ArgumentCaptor<Course> courseCaptor = ArgumentCaptor.forClass(Course.class);
+        verify(courseRepository, times(1)).save(courseCaptor.capture());
+        Course savedArgument = courseCaptor.getValue();
+        assertEquals(7L, savedArgument.getId());
+        assertEquals(updatedCourse.getCode(), savedArgument.getCode());
+        assertEquals(updatedCourse.getName(), savedArgument.getName());
+        assertEquals(updatedCourse.getTerm(), savedArgument.getTerm());
         String responseString = response.getResponse().getContentAsString();
-        assertEquals(expectedJson, responseString);
+        Course responseCourse = mapper.readValue(responseString, Course.class);
+        assertEquals(savedArgument.getId(), responseCourse.getId());
+        assertEquals(savedArgument.getCode(), responseCourse.getCode());
+        assertEquals(savedArgument.getName(), responseCourse.getName());
+        assertEquals(savedArgument.getTerm(), responseCourse.getTerm());
     }
 
     @WithMockUser(roles = { "ADMIN" })
@@ -320,5 +324,34 @@ public class CourseControllerTests extends ControllerTestCase {
                 .andExpect(status().isNotFound());
 
         verify(courseRepository, times(1)).findById(7L);
+    }
+
+    @Test
+    public void update_course_sets_all_fields() {
+        Course existing = Course.builder()
+                .id(9L)
+                .code("OLD 9")
+                .name("Old Name")
+                .term("F20")
+                .build();
+
+        Course incoming = Course.builder()
+                .code("NEW 9")
+                .name("New Name")
+                .term("W25")
+                .build();
+
+        when(courseRepository.findById(9L)).thenReturn(Optional.of(existing));
+        when(courseRepository.save(any(Course.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        CourseController controller = new CourseController();
+        ReflectionTestUtils.setField(controller, "courseRepository", courseRepository);
+
+        Course result = controller.updateCourse(9L, incoming);
+
+        assertEquals(9L, result.getId());
+        assertEquals(incoming.getCode(), result.getCode());
+        assertEquals(incoming.getName(), result.getName());
+        assertEquals(incoming.getTerm(), result.getTerm());
     }
 }
