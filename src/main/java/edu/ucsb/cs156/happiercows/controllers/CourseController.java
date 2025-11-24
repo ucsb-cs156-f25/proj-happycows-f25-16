@@ -50,4 +50,21 @@ public class CourseController extends ApiController {
         Course savedCourse = courseRepository.save(course);
         return savedCourse;
     }
+
+    @Operation(summary = "Update a course")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/{id}")
+    public Course updateCourse(
+            @Parameter(name = "id") @PathVariable Long id,
+            @Parameter(name = "course") @RequestBody Course incomingCourse) {
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Course.class, id));
+
+        course.setCode(incomingCourse.getCode());
+        course.setName(incomingCourse.getName());
+        course.setTerm(incomingCourse.getTerm());
+
+        Course savedCourse = courseRepository.save(course);
+        return savedCourse;
+    }
 }

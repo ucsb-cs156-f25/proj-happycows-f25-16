@@ -56,6 +56,21 @@ public class CourseControllerTests extends ControllerTestCase {
                 .andExpect(status().is(403));
     }
 
+    @Test
+    public void logged_out_users_cannot_put() throws Exception {
+        Course course = Course.builder()
+                .code("CMPSC 156")
+                .name("Advanced App Programming")
+                .term("F24")
+                .build();
+
+        mockMvc.perform(put("/api/course/1")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(course)))
+                .andExpect(status().is(403));
+    }
+
     // Regular users positive tests
 
     @WithMockUser(roles = { "USER" })
@@ -110,6 +125,22 @@ public class CourseControllerTests extends ControllerTestCase {
                 .build();
 
         mockMvc.perform(post("/api/course")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(course)))
+                .andExpect(status().is(403));
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void logged_in_user_cannot_put_course() throws Exception {
+        Course course = Course.builder()
+                .code("CMPSC 156")
+                .name("Advanced App Programming")
+                .term("F24")
+                .build();
+
+        mockMvc.perform(put("/api/course/1")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(course)))
@@ -178,5 +209,65 @@ public class CourseControllerTests extends ControllerTestCase {
         String expectedJson = mapper.writeValueAsString(savedCourse);
         String responseString = response.getResponse().getContentAsString();
         assertEquals(expectedJson, responseString);
+    }
+
+    @WithMockUser(roles = { "ADMIN" })
+    @Test
+    public void admin_can_put_existing_course() throws Exception {
+
+        Course originalCourse = Course.builder()
+                .id(7L)
+                .code("CMPSC 156")
+                .name("Advanced App Programming")
+                .term("F24")
+                .build();
+
+        Course updatedCourse = Course.builder()
+                .code("CMPSC 156")
+                .name("Advanced App Programming")
+                .term("W25")
+                .build();
+
+        Course savedCourse = Course.builder()
+                .id(7L)
+                .code("CMPSC 156")
+                .name("Advanced App Programming")
+                .term("W25")
+                .build();
+
+        when(courseRepository.findById(7L)).thenReturn(Optional.of(originalCourse));
+        when(courseRepository.save(originalCourse)).thenReturn(savedCourse);
+
+        MvcResult response = mockMvc.perform(put("/api/course/7")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(updatedCourse)))
+                .andExpect(status().isOk()).andReturn();
+
+        verify(courseRepository, times(1)).findById(7L);
+        verify(courseRepository, times(1)).save(originalCourse);
+        String expectedJson = mapper.writeValueAsString(savedCourse);
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals(expectedJson, responseString);
+    }
+
+    @WithMockUser(roles = { "ADMIN" })
+    @Test
+    public void admin_cannot_put_course_when_it_does_not_exist() throws Exception {
+        Course updatedCourse = Course.builder()
+                .code("CMPSC 156")
+                .name("Advanced App Programming")
+                .term("W25")
+                .build();
+
+        when(courseRepository.findById(7L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(put("/api/course/7")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(updatedCourse)))
+                .andExpect(status().isNotFound());
+
+        verify(courseRepository, times(1)).findById(7L);
     }
 }
