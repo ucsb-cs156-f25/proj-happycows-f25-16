@@ -2,6 +2,7 @@
 
 import edu.ucsb.cs156.happiercows.entities.Course;
 import edu.ucsb.cs156.happiercows.errors.EntityNotFoundException;
+import edu.ucsb.cs156.happiercows.models.CourseDTO;
 import edu.ucsb.cs156.happiercows.repositories.CourseRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,11 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-<span class="fc" id="L14">@Slf4j</span>
+<span class="fc" id="L15">@Slf4j</span>
 @Tag(name = &quot;Course&quot;)
 @RequestMapping(&quot;/api/course&quot;)
 @RestController
-<span class="fc" id="L18">public class CourseController extends ApiController {</span>
+<span class="fc" id="L19">public class CourseController extends ApiController {</span>
     @Autowired
     private CourseRepository courseRepository;
 
@@ -28,8 +29,8 @@ import org.springframework.web.bind.annotation.*;
     @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
     @GetMapping(&quot;/all&quot;)
     public Iterable&lt;Course&gt; allOrganisations() {
-<span class="fc" id="L31">        Iterable&lt;Course&gt; courses = courseRepository.findAll();</span>
-<span class="fc" id="L32">        return courses;</span>
+<span class="fc" id="L32">        Iterable&lt;Course&gt; courses = courseRepository.findAll();</span>
+<span class="fc" id="L33">        return courses;</span>
     }
 
     @Operation(summary = &quot;Get a course by id&quot;)
@@ -37,18 +38,18 @@ import org.springframework.web.bind.annotation.*;
     @GetMapping(&quot;/{id}&quot;)
     public Course getCourseById(
             @Parameter(name = &quot;id&quot;) @PathVariable Long id) {
-<span class="fc" id="L40">        Course course = courseRepository.findById(id)</span>
-<span class="fc" id="L41">                .orElseThrow(() -&gt; new EntityNotFoundException(Course.class, id));</span>
-<span class="fc" id="L42">        return course;</span>
+<span class="fc" id="L41">        Course course = courseRepository.findById(id)</span>
+<span class="fc" id="L42">                .orElseThrow(() -&gt; new EntityNotFoundException(Course.class, id));</span>
+<span class="fc" id="L43">        return course;</span>
     }
 
     @Operation(summary = &quot;Create a course&quot;)
     @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
     @PostMapping(&quot;&quot;)
     public Course postCourse(
-            @Parameter(name = &quot;course&quot;) @RequestBody Course course) {
-<span class="fc" id="L50">        Course savedCourse = courseRepository.save(course);</span>
-<span class="fc" id="L51">        return savedCourse;</span>
+            @Parameter(name = &quot;course&quot;) @RequestBody CourseDTO courseDTO) {
+<span class="fc" id="L51">        Course savedCourse = courseRepository.save(courseDTO.toCourse());</span>
+<span class="fc" id="L52">        return savedCourse;</span>
     }
 
     @Operation(summary = &quot;Update a course&quot;)
@@ -56,16 +57,16 @@ import org.springframework.web.bind.annotation.*;
     @PutMapping(&quot;/{id}&quot;)
     public Course updateCourse(
             @Parameter(name = &quot;id&quot;) @PathVariable Long id,
-            @Parameter(name = &quot;course&quot;) @RequestBody Course incomingCourse) {
-<span class="fc" id="L60">        Course course = courseRepository.findById(id)</span>
-<span class="fc" id="L61">                .orElseThrow(() -&gt; new EntityNotFoundException(Course.class, id));</span>
+            @Parameter(name = &quot;course&quot;) @RequestBody CourseDTO incomingCourse) {
+<span class="fc" id="L61">        Course course = courseRepository.findById(id)</span>
+<span class="fc" id="L62">                .orElseThrow(() -&gt; new EntityNotFoundException(Course.class, id));</span>
 
-<span class="fc" id="L63">        course.setCode(incomingCourse.getCode());</span>
-<span class="fc" id="L64">        course.setName(incomingCourse.getName());</span>
-<span class="fc" id="L65">        course.setTerm(incomingCourse.getTerm());</span>
+<span class="fc" id="L64">        course.setCode(incomingCourse.getCode());</span>
+<span class="fc" id="L65">        course.setName(incomingCourse.getName());</span>
+<span class="fc" id="L66">        course.setTerm(incomingCourse.getTerm());</span>
 
-<span class="fc" id="L67">        Course savedCourse = courseRepository.save(course);</span>
-<span class="fc" id="L68">        return savedCourse;</span>
+<span class="fc" id="L68">        Course savedCourse = courseRepository.save(course);</span>
+<span class="fc" id="L69">        return savedCourse;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
