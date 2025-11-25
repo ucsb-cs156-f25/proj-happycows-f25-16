@@ -2,6 +2,7 @@ package edu.ucsb.cs156.happiercows.controllers;
 
 import edu.ucsb.cs156.happiercows.ControllerTestCase;
 import edu.ucsb.cs156.happiercows.entities.Course;
+import edu.ucsb.cs156.happiercows.models.CourseDTO;
 import edu.ucsb.cs156.happiercows.repositories.CourseRepository;
 import edu.ucsb.cs156.happiercows.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,7 @@ public class CourseControllerTests extends ControllerTestCase {
 
     @Test
     public void logged_out_users_cannot_post() throws Exception {
-        Course course = Course.builder()
+        CourseDTO courseDTO = CourseDTO.builder()
                 .code("CMPSC 156")
                 .name("Advanced App Programming")
                 .term("F24")
@@ -53,13 +54,13 @@ public class CourseControllerTests extends ControllerTestCase {
         mockMvc.perform(post("/api/course")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(course)))
+                .content(mapper.writeValueAsString(courseDTO)))
                 .andExpect(status().is(403));
     }
 
     @Test
     public void logged_out_users_cannot_put() throws Exception {
-        Course course = Course.builder()
+        CourseDTO courseDTO = CourseDTO.builder()
                 .code("CMPSC 156")
                 .name("Advanced App Programming")
                 .term("F24")
@@ -68,7 +69,7 @@ public class CourseControllerTests extends ControllerTestCase {
         mockMvc.perform(put("/api/course/1")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(course)))
+                .content(mapper.writeValueAsString(courseDTO)))
                 .andExpect(status().is(403));
     }
 
@@ -119,7 +120,7 @@ public class CourseControllerTests extends ControllerTestCase {
     @WithMockUser(roles = { "USER" })
     @Test
     public void logged_in_user_cannot_post_course() throws Exception {
-        Course course = Course.builder()
+        CourseDTO courseDTO = CourseDTO.builder()
                 .code("CMPSC 156")
                 .name("Advanced App Programming")
                 .term("F24")
@@ -128,14 +129,14 @@ public class CourseControllerTests extends ControllerTestCase {
         mockMvc.perform(post("/api/course")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(course)))
+                .content(mapper.writeValueAsString(courseDTO)))
                 .andExpect(status().is(403));
     }
 
     @WithMockUser(roles = { "USER" })
     @Test
     public void logged_in_user_cannot_put_course() throws Exception {
-        Course course = Course.builder()
+        CourseDTO courseDTO = CourseDTO.builder()
                 .code("CMPSC 156")
                 .name("Advanced App Programming")
                 .term("F24")
@@ -144,7 +145,7 @@ public class CourseControllerTests extends ControllerTestCase {
         mockMvc.perform(put("/api/course/1")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(course)))
+                .content(mapper.writeValueAsString(courseDTO)))
                 .andExpect(status().is(403));
     }
 
@@ -185,7 +186,7 @@ public class CourseControllerTests extends ControllerTestCase {
     @Test
     public void admin_can_post_new_course() throws Exception {
 
-        Course course = Course.builder()
+        CourseDTO courseDTO = CourseDTO.builder()
                 .code("CMPSC 156")
                 .name("Advanced App Programming")
                 .term("F24")
@@ -198,15 +199,20 @@ public class CourseControllerTests extends ControllerTestCase {
                 .term("F24")
                 .build();
 
-        when(courseRepository.save(course)).thenReturn(savedCourse);
+        when(courseRepository.save(any(Course.class))).thenReturn(savedCourse);
 
         MvcResult response = mockMvc.perform(post("/api/course")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(course)))
+                .content(mapper.writeValueAsString(courseDTO)))
                 .andExpect(status().isOk()).andReturn();
 
-        verify(courseRepository, times(1)).save(course);
+        ArgumentCaptor<Course> courseCaptor = ArgumentCaptor.forClass(Course.class);
+        verify(courseRepository, times(1)).save(courseCaptor.capture());
+        Course savedArgument = courseCaptor.getValue();
+        assertEquals(courseDTO.getCode(), savedArgument.getCode());
+        assertEquals(courseDTO.getName(), savedArgument.getName());
+        assertEquals(courseDTO.getTerm(), savedArgument.getTerm());
         String expectedJson = mapper.writeValueAsString(savedCourse);
         String responseString = response.getResponse().getContentAsString();
         assertEquals(expectedJson, responseString);
@@ -223,7 +229,7 @@ public class CourseControllerTests extends ControllerTestCase {
                 .term("F20")
                 .build();
 
-        Course updatedCourse = Course.builder()
+        CourseDTO updatedCourseDTO = CourseDTO.builder()
                 .code("CMPSC 156")
                 .name("Advanced App Programming")
                 .term("W25")
@@ -242,7 +248,7 @@ public class CourseControllerTests extends ControllerTestCase {
         MvcResult response = mockMvc.perform(put("/api/course/7")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(updatedCourse)))
+                .content(mapper.writeValueAsString(updatedCourseDTO)))
                 .andExpect(status().isOk()).andReturn();
 
         verify(courseRepository, times(1)).findById(7L);
@@ -250,9 +256,9 @@ public class CourseControllerTests extends ControllerTestCase {
         verify(courseRepository, times(1)).save(courseCaptor.capture());
         Course savedArgument = courseCaptor.getValue();
         assertEquals(7L, savedArgument.getId());
-        assertEquals(updatedCourse.getCode(), savedArgument.getCode());
-        assertEquals(updatedCourse.getName(), savedArgument.getName());
-        assertEquals(updatedCourse.getTerm(), savedArgument.getTerm());
+        assertEquals(updatedCourseDTO.getCode(), savedArgument.getCode());
+        assertEquals(updatedCourseDTO.getName(), savedArgument.getName());
+        assertEquals(updatedCourseDTO.getTerm(), savedArgument.getTerm());
         String expectedJson = mapper.writeValueAsString(savedCourse);
         String responseString = response.getResponse().getContentAsString();
         assertEquals(expectedJson, responseString);
@@ -261,7 +267,7 @@ public class CourseControllerTests extends ControllerTestCase {
     @WithMockUser(roles = { "ADMIN" })
     @Test
     public void admin_cannot_put_course_when_it_does_not_exist() throws Exception {
-        Course updatedCourse = Course.builder()
+        CourseDTO updatedCourseDTO = CourseDTO.builder()
                 .code("CMPSC 156")
                 .name("Advanced App Programming")
                 .term("W25")
@@ -272,7 +278,7 @@ public class CourseControllerTests extends ControllerTestCase {
         mockMvc.perform(put("/api/course/7")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(updatedCourse)))
+                .content(mapper.writeValueAsString(updatedCourseDTO)))
                 .andExpect(status().isNotFound());
 
         verify(courseRepository, times(1)).findById(7L);
