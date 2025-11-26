@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-f25/proj-happycows-f25-16
 owner: ucsb-cs156-f25
 repo_name: proj-happycows-f25-16
-pull_requests: [{"author":{"id":"U_kgDOBnO7gw","is_bot":false,"login":"quinnkos","name":"Quinn Koster"},"headRefName":"quinn-react-component-commonsfeatures","number":41,"title":"add React component for toggling CommonsFeatures","url":"https://github.com/ucsb-cs156-f25/proj-happycows-f25-16/pull/41"},{"author":{"id":"MDQ6VXNlcjQyNTIxODgw","is_bot":false,"login":"omar882","name":"Omar Aboutaleb"},"headRefName":"add-commons-features-end","number":40,"title":"Add CommonsFeatures enum and GET /api/commonsfeatures endpoint with tests","url":"https://github.com/ucsb-cs156-f25/proj-happycows-f25-16/pull/40"}]
+pull_requests: [{"author":{"id":"U_kgDOBnO7gw","is_bot":false,"login":"quinnkos","name":"Quinn Koster"},"headRefName":"quinn-react-component-commonsfeatures","number":41,"title":"add React component for toggling CommonsFeatures","url":"https://github.com/ucsb-cs156-f25/proj-happycows-f25-16/pull/41"}]
