@@ -15,6 +15,7 @@ happycows,edu.ucsb.cs156.happiercows.strategies,CowHealthUpdateStrategies.new Co
 happycows,edu.ucsb.cs156.happiercows.strategies,CowHealthUpdateStrategies.new CowHealthUpdateStrategies() {...},0,53,0,2,0,9,0,3,0,2
 happycows,edu.ucsb.cs156.happiercows.strategies,CowHealthUpdateStrategies,0,50,0,0,0,9,0,1,0,1
 happycows,edu.ucsb.cs156.happiercows.models,HealthUpdateStrategyList,0,29,0,0,0,12,0,2,0,2
+happycows,edu.ucsb.cs156.happiercows.models,CourseDTO,0,12,0,0,0,5,0,1,0,1
 happycows,edu.ucsb.cs156.happiercows.helpers,CommonStatsCSVHelper,0,117,0,2,0,23,0,3,0,2
 happycows,edu.ucsb.cs156.happiercows.helpers,ReportCSVHelper,0,167,0,2,0,27,0,3,0,2
 happycows,edu.ucsb.cs156.happiercows.interceptors,RoleUserInterceptor,0,94,0,10,0,25,0,9,0,4
@@ -47,7 +48,7 @@ happycows,edu.ucsb.cs156.happiercows.entities,UserCommons,0,15,0,0,0,5,0,4,0,4
 happycows,edu.ucsb.cs156.happiercows.entities,Commons,0,16,0,4,0,4,0,3,0,1
 happycows,edu.ucsb.cs156.happiercows.entities,User,0,16,0,0,0,1,0,1,0,1
 happycows,edu.ucsb.cs156.happiercows.controllers,UserCommonsController,0,259,0,4,0,46,0,14,0,12
-happycows,edu.ucsb.cs156.happiercows.controllers,CourseController,0,30,0,0,0,7,0,5,0,5
+happycows,edu.ucsb.cs156.happiercows.controllers,CourseController,0,39,0,0,0,9,0,6,0,6
 happycows,edu.ucsb.cs156.happiercows.controllers,CommonsController,0,596,0,38,0,136,0,37,0,18
 happycows,edu.ucsb.cs156.happiercows.controllers,ChatMessageController,0,282,0,22,0,59,0,22,0,11
 happycows,edu.ucsb.cs156.happiercows.controllers,JobsController,0,146,0,8,0,30,0,16,0,12
